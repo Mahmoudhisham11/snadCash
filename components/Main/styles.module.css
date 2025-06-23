@@ -1,0 +1,74 @@
+.mainContainer {
+    width: 100%;
+    min-height: 100vh;
+}
+.header {
+    width: 100%;
+    height: 150px;
+    background-color: var(--main-color);
+    padding: 0 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.title {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    gap: 10px;
+}
+.title h2 {
+    font-size: 40px;
+    color: white;
+}
+.title strong {
+    font-size: 20px;
+    color: white;
+}
+.tableContainer {
+    width: 100%;
+    padding: 30px 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+}
+.btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+.btns button {
+    font-size: 30px;
+    color: white;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+.boxTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.boxTitle button {
+    background-color: transparent;
+    font-size: 20px;
+    color: red;
+    border: none;
+    cursor: pointer;
+}
+
+@media(max-width: 767px) {
+    .title h2 {
+        font-size: 30px;
+    }
+    .title strong {
+        font-size: 20px;
+    }
+    .btns button {
+        font-size: 20px;
+    }
+}
