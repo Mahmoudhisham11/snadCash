@@ -40,7 +40,7 @@ function Reports() {
         <div className={styles.Reports}>
             <div className={styles.header}>
                 <div className="inputContainer">
-                    <input type="date" onChange={(e) => setDate(e.target.value)}/>
+                    <input type="date" onChange={(e) => setDate(e.target.value)} placeholder="ابحث بالتاريخ"/>
                 </div>
                 <button onClick={() => router.push('/')}><IoIosArrowDropleftCircle/></button>
             </div>
@@ -68,7 +68,7 @@ function Reports() {
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colSpan={1}>الربح اليومي : {total}</td>
+                            <td colSpan={1}>الربح : {total}</td>
                         </tr>
                     </tfoot>
                 </table>
