@@ -39,9 +39,7 @@ function Reports() {
     return(
         <div className={styles.Reports}>
             <div className={styles.header}>
-                <div className="inputContainer">
-                    <input type="date" onChange={(e) => setDate(e.target.value)} placeholder="ابحث بالتاريخ"/>
-                </div>
+                <input type="date" onChange={(e) => setDate(e.target.value)} placeholder="ابحث بالتاريخ"/>
                 <button onClick={() => router.push('/')}><IoIosArrowDropleftCircle/></button>
             </div>
             <div className={styles.content}>
