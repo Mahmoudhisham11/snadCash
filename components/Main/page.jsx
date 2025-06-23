@@ -129,6 +129,13 @@ function Main() {
         }
     }
 
+    const handleLogout = () => {
+        if(typeof window !== 'undefined') {
+            localStorage.clear()
+            window.location.reload()
+        }
+    }
+
     return(
         <div className={stylse.mainContainer}>
             <div className="boxShadow" style={{display: openBox ? 'flex' : 'none'}}>
@@ -174,6 +181,7 @@ function Main() {
                             <input type="number" value={cash} placeholder="ادخل عمولة الكاش" onChange={(e) => setCash(e.target.value)}/>
                         </div>
                         <button onClick={handleSittings}>اكمل العملية</button>
+                        <button onClick={handleLogout}>تسجيل الخروج</button>
                     </div>
                 </div>
             </div>
