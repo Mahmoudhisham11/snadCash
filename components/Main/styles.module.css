@@ -39,36 +39,115 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
+    gap: 25px;
 }
 .btns button {
-    font-size: 30px;
-    color: white;
     background-color: transparent;
+    color: white;
     border: none;
+    font-size: 30px;
     cursor: pointer;
 }
+.box {
+    width: 90%;
+    height: 430px;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
 .boxTitle {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.boxTitle button {
+.boxTitle h2 {
+    font-size: 25px;
+    color: black;
+}
+.boxTitle button{
     background-color: transparent;
-    font-size: 20px;
     color: red;
     border: none;
+    font-size: 25px;
     cursor: pointer;
 }
+.boxContent {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+}
+.boxContent button {
+    width: 100%;
+    height: 40px;
+    font-size: 20px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--main-color);
+    cursor: pointer;
+}
+.content {
+    width: 100%;
+    padding: 50px 2%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 15px;
+}
+.card {
+    width: 100%;
+    height: 65px;
+    background-color: var(--gray-color);
+    border-radius: 8px;
+    padding: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: .3s;
+}
+.card.active {
+    height: 230px;
+}
+.cardHead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+}
+.cardHead h2 {
+    font-size: 25px;
+}
+.cardHead button {
+    background-color: transparent;
+    color: red;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+.cardBody {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 15px;
+    padding-top: 20px;
+}
+.cardBody strong {
+    font-size: 20px;
+}
+
 
 @media(max-width: 767px) {
     .title h2 {
         font-size: 30px;
     }
     .title strong {
-        font-size: 20px;
-    }
-    .btns button {
         font-size: 20px;
     }
 }
