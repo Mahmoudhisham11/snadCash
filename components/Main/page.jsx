@@ -8,16 +8,21 @@ import { TbReportSearch } from "react-icons/tb";
 import { GoGear } from "react-icons/go";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { FaTrashAlt } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 function Main() {
+    const router = useRouter()
     const [users, setUsers] = useState([])
     const [operations, setOperations] = useState([])
     const [openOperation, setOpenOperation] = useState(false)
+    const [openSittings, setOperSittings] = useState(false)
     const [activeCard, setActiveCard] = useState('')
     const [total, setTotal] = useState('')
     const [email, setEmail] = useState('')
     const [amount, setAmount] = useState('')
     const [commation, setCommation] = useState('')
+    const [wallet, setWallet] = useState('')
+    const [cash, setCash] = useState('')
     const [type, setType] = useState('استلام')
 
     useEffect(() => {
@@ -113,6 +118,27 @@ function Main() {
     const handleDeleteOperation = async(id) => {
         await deleteDoc(doc(db, 'operations', id))
     }
+    // UPDATE AMOUNT
+    const handleUpdateAmount = async() => {
+        const q = query(collection(db, 'snadUsers'), where('email', '==', email))
+        const querySnapshot = await getDocs(q)
+        if(!querySnapshot.empty) {
+            const userDoc = querySnapshot.docs[0]
+            const userRef = doc(db, 'snadUsers', userDoc.id)
+            const userData = userDoc.data()
+            await updateDoc(userRef, {cash, wallet})
+            alert('تم تعديل رائس المال بنحاح')
+            setWallet('')
+            setCash('')
+        }
+    }
+    // HANDLE LOGOUT
+    const handleLogout = () => {
+        if(typeof window !== 'undefined') {
+            localStorage.clear()
+            window.location.reload()
+        }
+    }
 
 
     return(
@@ -145,6 +171,26 @@ function Main() {
                     </div>
                 </div>
             </div>
+            <div className="boxShadow" style={{display: openSittings ? 'flex' : 'none'}}>
+                <div className={styles.box}>
+                    <div className={styles.boxTitle}>
+                        <h2>الاعدادات</h2>
+                        <button onClick={() => setOperSittings(false)}><IoMdCloseCircleOutline/></button>
+                    </div>
+                    <div className={styles.boxContent}>
+                        <div className="inputContainer">
+                            <label>قيمة المحافظ : </label>
+                            <input type="number" value={wallet} onChange={(e) => setWallet(e.target.value)}/>
+                        </div>
+                        <div className="inputContainer">
+                            <label>قيمة النقدي : </label>
+                            <input type="number" value={cash} onChange={(e) => setCash(e.target.value)}/>
+                        </div>
+                        <button onClick={handleUpdateAmount}>اكمل العملية</button>
+                        <button onClick={handleLogout}>تسجيل الخروج</button>
+                    </div>
+                </div>
+            </div>
             <div className={styles.header}>
                 <div className={styles.title}>
                     <h2>رائس المال</h2>
@@ -152,8 +198,8 @@ function Main() {
                 </div>
                 <div className={styles.btns}>
                     <button onClick={() => setOpenOperation(true)}><IoWalletOutline/></button>
-                    <button><TbReportSearch/></button>
-                    <button><GoGear/></button>
+                    <button onClick={() => router.push('/reports')}><TbReportSearch/></button>
+                    <button onClick={() => setOperSittings(true)}><GoGear/></button>
                 </div>
             </div>
             <div className={styles.content}>
