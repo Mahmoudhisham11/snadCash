@@ -10,8 +10,8 @@ function Login() {
     const [creat, setCreat] = useState(false)
     const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [cash, setCah] = useState('')
+    const [password, setPassword] = useState(0)
+    const [cash, setCah] = useState(0)
     const [wallet, setWallets] = useState('')
 
         const handleCreatAcc = async() => {
