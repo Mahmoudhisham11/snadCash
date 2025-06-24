@@ -35,13 +35,13 @@ function Login() {
             alert("يجب ادخال قيمة المحافظ ")
             return
         }
-        const q = query(collection(db, 'snadUsers'), where('emial', '==', email.toLowerCase().trim()))
+        const q = query(collection(db, 'snadUsers'), where('emial', '==', email))
         const querySnapshot = await getDocs(q)
         if(querySnapshot.empty) {
             await addDoc(collection(db, 'snadUsers'), {
-                userName: userName.toLowerCase().trim(),
+                userName,
                  password, 
-                 email:  email.toLowerCase().trim(),
+                 email,
                  wallet,
                  cash,
                  expensses: 0
@@ -58,7 +58,7 @@ function Login() {
     }
 
     const handleLogin = async() => {
-        const q = query(collection(db, 'snadUsers'), where('email', '==', email.toLowerCase().trim()))
+        const q = query(collection(db, 'snadUsers'), where('email', '==', email))
         const querySnapshot = await getDocs(q)
         if(querySnapshot.empty) {
             alert('اسم المستخدم غير صحيح')

@@ -38,11 +38,7 @@ function Main() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storageEmail = localStorage.getItem("email");
-      if (!storageEmail) {
-        console.warn("Email not found in localStorage");
-        return;
-      }
-
+      if (!storageEmail) return;
       setEmail(storageEmail);
 
       const q = query(collection(db, "snadUsers"), where("email", "==", storageEmail));
@@ -65,16 +61,12 @@ function Main() {
   }, []);
 
   useEffect(() => {
-    if (users.length > 0) {
-      console.log("Users:", users);
-      const subtotal = users.reduce((acc, u) => acc + (+u.wallet || 0) + (+u.cash || 0), 0);
-      setTotal(subtotal);
-    }
+    const subtotal = users.reduce((acc, u) => acc + (+u.wallet || 0) + (+u.cash || 0), 0);
+    setTotal(subtotal);
   }, [users]);
 
   const handleAddOperation = async () => {
     if (!amount || !commation) return alert("برجاء ادخال بيانات العملية");
-
     const date = new Date().toISOString().split("T")[0];
     await addDoc(collection(db, "operations"), { amount, commation, type, email, date });
     await addDoc(collection(db, "reports"), { amount, commation, type, email, date });
@@ -87,16 +79,12 @@ function Main() {
       const data = docRef.data();
       let updateData = {};
 
-      if (type === "استلام") {
-        updateData = { wallet: +data.wallet + +amount, cash: +data.cash - +amount };
-      } else if (type === "ارسال") {
-        updateData = { wallet: +data.wallet - +amount, cash: +data.cash + +amount };
-      } else if (type === "مصاريف" || type === "اجل") {
-        updateData = {
-          cash: +data.cash - +amount,
-          expensses: (+data.expensses || 0) + +amount,
-        };
-      }
+      if (type === "استلام") updateData = { wallet: +data.wallet + +amount, cash: +data.cash - +amount };
+      else if (type === "ارسال") updateData = { wallet: +data.wallet - +amount, cash: +data.cash + +amount };
+      else if (type === "مصاريف" || type === "اجل") updateData = {
+        cash: +data.cash - +amount,
+        expensses: (+data.expensses || 0) + +amount,
+      };
 
       await updateDoc(ref, updateData);
     }
