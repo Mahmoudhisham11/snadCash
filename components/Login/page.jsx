@@ -42,7 +42,6 @@ function Login() {
                 userName: userName.toLowerCase().trim(),
                  password, 
                  email:  email.toLowerCase().trim(),
-                 active: false,
                  wallet,
                  cash,
                  expensses: 0
