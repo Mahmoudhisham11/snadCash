@@ -117,6 +117,11 @@ function Main() {
                     cash: Number(userData.cash) - numAmount,
                     wallet: Number(userData.wallet) + numAmount
                 };
+            } else if (type === "الاجل") {
+                updateData = {
+                    expensses: Number(userData.expensses) + numAmount,
+                    cash: Number(userData.cash) - numAmount
+                };
             }
 
             await updateDoc(userRef, updateData);
@@ -179,6 +184,7 @@ function Main() {
                                 <option value="ارسال">ارسال</option>
                                 <option value="استلام">استلام</option>
                                 <option value="مصاريف">مصاريف</option>
+                                <option value="الاجل">الاجل</option>
                             </select>
                         </div>
                         <button onClick={handleOperation}>اكمل العملية</button>
