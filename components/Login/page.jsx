@@ -50,6 +50,8 @@ function Login() {
             setUserName('')
             setPassword('')
             setEmail('')
+            setWallets('')
+            setCah('')
         }else {
             alert('المستخدم موجود بالفعل')
         }
