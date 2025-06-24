@@ -16,7 +16,7 @@ function Reports() {
         if(typeof window !== 'undefined') {
             const storageEmail = localStorage.getItem('email')
             
-            const q = query(collection(db, 'reports'), where('date', '==', date), where('email', '==', storageEmail))
+            const q = query(collection(db, 'snadReports'), where('date', '==', date), where('email', '==', storageEmail))
             const unsubscribe = onSnapshot(q, (querySnapshot) => {
                 const reportsArray = []
                 querySnapshot.forEach((doc) => {

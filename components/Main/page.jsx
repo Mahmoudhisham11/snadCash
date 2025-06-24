@@ -35,7 +35,7 @@ function Main() {
     useEffect(() => {
         if (!email) return;
 
-        const q = query(collection(db, 'operations'), where('email', '==', email));
+        const q = query(collection(db, 'snadOperations'), where('email', '==', email));
         const unsubOperations = onSnapshot(q, (querySnapshot) => {
             const operationsArray = [];
             querySnapshot.forEach((doc) => {
@@ -44,7 +44,7 @@ function Main() {
             setOperations(operationsArray);
         });
 
-        const usersQ = query(collection(db, 'users'), where('email', '==', email));
+        const usersQ = query(collection(db, 'snadUsers'), where('email', '==', email));
         const unsubUsers = onSnapshot(usersQ, (querySnapshot) => {
             const userArray = [];
             querySnapshot.forEach((doc) => {
@@ -76,12 +76,12 @@ function Main() {
             return;
         }
 
-        const q = query(collection(db, 'users'), where('email', '==', email));
+        const q = query(collection(db, 'snadUsers'), where('email', '==', email));
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
             const userDoc = querySnapshot.docs[0];
             const userData = userDoc.data();
-            const userRef = doc(db, 'users', userDoc.id);
+            const userRef = doc(db, 'snadUsers', userDoc.id);
 
             if (type === "استلام" && Number(userData.cash) < numAmount) {
                 alert("رصيد الكاش غير كافي");
@@ -97,8 +97,8 @@ function Main() {
             };
 
             await Promise.all([
-                addDoc(collection(db, 'operations'), operationData),
-                addDoc(collection(db, 'reports'), operationData)
+                addDoc(collection(db, 'snadOperations'), operationData),
+                addDoc(collection(db, 'snadReports'), operationData)
             ]);
 
             let updateData = {};
@@ -134,15 +134,15 @@ function Main() {
     };
 
     const handleDelete = async (id) => {
-        await deleteDoc(doc(db, 'operations', id));
+        await deleteDoc(doc(db, 'snadOperations', id));
     };
 
     const handleSettings = async () => {
-        const q = query(collection(db, 'users'), where('email', '==', email));
+        const q = query(collection(db, 'snadUsers'), where('email', '==', email));
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
             const userDoc = querySnapshot.docs[0];
-            const userRef = doc(db, 'users', userDoc.id);
+            const userRef = doc(db, 'snadUsers', userDoc.id);
             await updateDoc(userRef, {
                 wallet: Number(wallet),
                 cash: Number(cash)
