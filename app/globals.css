@@ -2,12 +2,14 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Rubik";
+  font-family: "Tajawal";
 }
 :root {
-  --main-color: #0E6B3C;
-  --gray-color: #E0E0E0;
-  --black-color: #222;
+  --main-color: #a5c7b7;
+  --text-color: #2f4f4f;
+  --background-color: #f5faf7;
+  --gray-color: #7d8a85;
+  --darck-green: #3e6655;
 }
 body {
   direction: rtl;
@@ -18,172 +20,34 @@ body {
 }
 .inputContainer {
   width: 100%;
+  height: 50px;
   display: flex;
-  justify-content: start;
-  align-items: start;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   gap: 10px;
   direction: rtl;
+  background-color: white;
+  padding: 0 2%;
+  border-radius: 8px;
+  border: 1px solid var(--main-color);
 }
 .inputContainer label {
-  width: 100%;
-  font-size: 30px;
+  font-size: 20px;
   color: black;
 }
 .inputContainer input {
   width: 100%;
   outline: none;
+  border: none;
   padding: 7px;
-  border-radius: 8px;
-  border: 1px solid black;
   font-size: 20px;
+  background-color: transparent;
 }
 .inputContainer select {
   width: 100%;
   outline: none;
   padding: 7px;
   border-radius: 8px;
-  border: 1px solid black;
-  font-size: 20px;
-}
-.card {
-  width: 100%;
-  height: 80px;
-  background-color: var(--gray-color);
-  border-radius: 8px;
-  padding: 2%;
-  cursor: pointer;
-  overflow: hidden;
-  transition: .3s;
-}
-.card.active {
-  height: 300px;
-}
-.head{
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 30px;
-}
-.head button {
-  background-color: transparent;
-  font-size: 20px;
-  color: red;
   border: none;
-  cursor: pointer;
-}
-.buttom {
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  flex-direction: column;
-  gap: 15px;
-  padding-top: 30px;
-}
-.buttom strong {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-.boxShadow {
-  width: 100%;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  background-color: rgba(0, 0, 0, .5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.mainBox {
-  width: 90%;
-  height: 450px;
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px 2%;
-}
-.boxContent {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 15px;
-}
-.boxContent button {
-  width: 100%;
-  height: 40px;
-  border: none;
-  border-radius: 8px;
   font-size: 20px;
-  color: white;
-  background-color: var(--main-color);
-  cursor: pointer;
-}
-
-table {
-  width: 100%;
-  text-align: center;
-}
-table, th, td {
-  padding: 20px;
-  border-collapse: collapse;
-}
-thead th {
-  position: sticky;
-  top: 0;
-  background-color: var(--black-color);
-  color: whitesmoke;
-}
-tbody tr:nth-child(even) {
-    background-color: #0000000b;
-}
-.actions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-.actions button {
-  width: 30px;
-  height: 30px;
-  font-size: 20px;
-  padding: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
-  border-radius: 8px;
-  background-color: transparent;
-  cursor: pointer;
-}
-.actions button:first-child {
-  color: rgb(30, 30, 199);
-}
-.actions button:last-child {
-  color: red;
-}
-.boxShadow {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, .5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-}
-tfoot {
-  background-color: var(--black-color);
-  color: white;
-  font-size: 20px;
-}
-
-@media(max-width: 767px) {
-  .card {
-    height: 50px;
-  }
 }

@@ -1,153 +1,167 @@
-.mainContainer {
+.main {
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
+    background-color: var(--background-color);
 }
 .header {
-    width: 100%;
-    height: 150px;
-    background-color: var(--main-color);
-    padding: 0 2%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 15px 2%;
 }
-.title {
+.name {
+    width: 50%;
+}
+.icon {
+    width: 50%;
     display: flex;
-    justify-content: start;
-    align-items: start;
-    flex-direction: column;
-    gap: 10px;
+    justify-content: end;
+    align-items: end;
 }
-.title h2 {
-    font-size: 40px;
-    color: white;
+.inputContainer {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding: 0 2%;
+  border-radius: 50%;
+  transition: .3s;
 }
-.title strong {
-    font-size: 20px;
-    color: white;
-}
-.tableContainer {
+.inputContainer.open {
     width: 100%;
-    padding: 30px 2%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 15px;
+    border-radius: 8px;
+    justify-content: space-between;
+}
+.inputContainer.open input {
+    display: block;
+}
+.inputContainer label {
+  font-size: 25px;
+  color: var(--main-color);
+  cursor: pointer;
+}
+.inputContainer input {
+  width: 100%;
+  outline: none;
+  border: none;
+  padding: 7px;
+  font-size: 20px;
+  background-color: transparent;
+  display: none;
 }
 .btns {
+    width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 25px;
+    padding: 0 1%;
+    margin-top: 35px;
 }
 .btns button {
     background-color: transparent;
-    color: white;
     border: none;
-    font-size: 30px;
-    cursor: pointer;
-}
-.box {
-    width: 90%;
-    height: 430px;
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    gap: 20px;
-}
-.boxTitle {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.boxTitle h2 {
-    font-size: 25px;
-    color: black;
-}
-.boxTitle button{
-    background-color: transparent;
-    color: red;
-    border: none;
-    font-size: 25px;
-    cursor: pointer;
-}
-.boxContent {
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
 }
-.boxContent button {
-    width: 100%;
-    height: 40px;
-    font-size: 20px;
-    color: white;
-    border: none;
-    border-radius: 8px;
+.btns button span:first-child {
+    width: 50px;
+    height: 50px;
+    font-size: 25px;
     background-color: var(--main-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
     cursor: pointer;
+}
+.clientsContainer {
+    width: 100%;
+    height: calc(100vh - 220px);
+    background-color: white;
+    border-radius: 28px 28px 0 0;
+    margin-top: 20px;
+}
+.title {
+    width: 100%;
+    text-align: center;
+    padding: 15px 0;
 }
 .content {
     width: 100%;
-    padding: 50px 2%;
     display: flex;
     justify-content: center;
+    align-items: center;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
+    padding: 0 2%;
 }
 .card {
     width: 100%;
-    height: 65px;
-    background-color: var(--gray-color);
+    height: fit-content;
+    background-color: var(--background-color);
+    border: 1px solid var(--main-color);
     border-radius: 8px;
-    padding: 20px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: .3s;
-}
-.card.active {
-    height: 230px;
+    padding: 15px;
 }
 .cardHead {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
 }
-.cardHead h2 {
-    font-size: 25px;
+.text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+.text p {
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    color: var(--main-color);
+    font-size: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.text strong {
+    color: var(--text-color);
+    font-size: 20px;
 }
 .cardHead button {
     background-color: transparent;
-    color: red;
     border: none;
-    font-size: 20px;
+    font-size: 25px;
     cursor: pointer;
+    color: rgb(247, 52, 52);
 }
 .cardBody {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+}
+.cardBody p {
+    color: var(--gray-color);
+    display: flex;
     justify-content: center;
-    flex-direction: column;
-    gap: 15px;
-    padding-top: 20px;
+    align-items: center;
+    gap: 5px;
+    font-size: 18px;
 }
-.cardBody strong {
-    font-size: 20px;
-}
-
-
-@media(max-width: 767px) {
-    .title h2 {
-        font-size: 30px;
-    }
-    .title strong {
-        font-size: 20px;
-    }
+.clientPage {
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
 }

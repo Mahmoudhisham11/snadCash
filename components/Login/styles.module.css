@@ -1,17 +1,36 @@
 .loginContainer {
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
+    background-color: var(--background-color);
     display: flex;
     justify-content: start;
     align-items: center;
     flex-direction: column;
     gap: 15px;
-    padding: 20px 2%;
+    padding: 0 2%;
 }
-.imageContainer {
-    position: relative;
-    width: 650px;
-    min-height: 350px;
+.inputBox {
+    width: 100%;
+    height: calc(100vh - 200px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+}
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+.title h2 {
+    color: var(--text-color);
+}
+.title p {
+    color: var(--gray-color);
+    font-size: 20px;
 }
 .loginContent {
     width: 100%;
@@ -21,9 +40,6 @@
     align-items: center;
     flex-direction: column;
     gap: 15px;
-}
-.title {
-    margin-bottom: 30px;
 }
 .loginBtn {
     width: 100%;
@@ -47,8 +63,7 @@
 }
 
 @media(max-width: 767px) {
-    .imageContainer {
-        width: 300px;
-        height: 300px;
+    .title p {
+        font-size: 16px;
     }
 }

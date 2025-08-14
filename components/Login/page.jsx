@@ -5,14 +5,15 @@ import logo from "../../public/images/logo.png"
 import { useState } from "react";
 import { db } from "@/app/firebase";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { CiMail } from "react-icons/ci";
+import { CiLock } from "react-icons/ci";
+import { IoPerson } from "react-icons/io5";
 
 function Login() {
     const [creat, setCreat] = useState(false)
     const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [cash, setCah] = useState(0)
-    const [wallet, setWallets] = useState(0)
 
         const handleCreatAcc = async() => {
         if(!userName) {
@@ -27,38 +28,25 @@ function Login() {
             alert("يجب ادخال البريد الالكتروني ")
             return
         }
-        if(!wallet) {
-            alert("يجب ادخال قيمة الكاش ")
-            return
-        }
-        if(!cash) {
-            alert("يجب ادخال قيمة المحافظ ")
-            return
-        }
-        const q = query(collection(db, 'snadUsers'), where('emial', '==', email))
+        const q = query(collection(db, 'users'), where('emial', '==', email))
         const querySnapshot = await getDocs(q)
         if(querySnapshot.empty) {
-            await addDoc(collection(db, 'snadUsers'), {
+            await addDoc(collection(db, 'users'), {
                 userName,
                  password, 
                  email,
-                 wallet,
-                 cash,
-                 expensses: 0
                 })
             alert("تم انشاء حساب للمستخدم")
             setUserName('')
             setPassword('')
             setEmail('')
-            setWallets('')
-            setCah('')
         }else {
             alert('المستخدم موجود بالفعل')
         }
     }
 
     const handleLogin = async() => {
-        const q = query(collection(db, 'snadUsers'), where('email', '==', email))
+        const q = query(collection(db, 'users'), where('email', '==', email))
         const querySnapshot = await getDocs(q)
         if(querySnapshot.empty) {
             alert('اسم المستخدم غير صحيح')
@@ -79,50 +67,45 @@ function Login() {
 
     return(
         <div className={styles.loginContainer}>
-            <div className={styles.imageContainer}>
-                <Image src={logo} fill style={{objectFit: 'cover', borderRadius: '8px'}} alt="logoImage"/>
-            </div>
             <div className={styles.loginContent} style={{display: creat ? 'none' : 'flex'}}>
                 <div className={styles.title}>
                     <h2>مرحبا بك برجاء تسجيل الدخول</h2>
+                    <p>مرحبا بعودتك دائما</p>
                 </div>
-                <div className="inputContainer">
-                    <label>البريد الالكتروني : </label>
-                    <input type="text" placeholder="برجاء ادخال البريد الالكتروني" onChange={(e) => setEmail(e.target.value)}/>
+                <div className={styles.inputBox}>
+                    <div className="inputContainer">
+                        <label><CiMail/></label>
+                        <input type="text" placeholder="البريد الالكتروني" onChange={(e) => setEmail(e.target.value)}/>
+                    </div>
+                    <div className="inputContainer">
+                        <label><CiLock/></label>
+                        <input type="password" placeholder="كلمة المرور" onChange={(e) => setPassword(e.target.value)}/>
+                    </div>
+                    <button className={styles.loginBtn} onClick={handleLogin}>تسجيل الدخول</button>
+                    <button className={styles.creatBtn} onClick={() => setCreat(true)}>ليس لديك لديك حساب؟ <span>انشاء حساب جديد</span></button>
                 </div>
-                <div className="inputContainer">
-                    <label>كلمة المرور : </label>
-                    <input type="password" placeholder="برجاء ادخال كلمة المرور" onChange={(e) => setPassword(e.target.value)}/>
-                </div>
-                <button className={styles.loginBtn} onClick={handleLogin}>تسجيل الدخول</button>
-                <button className={styles.creatBtn} onClick={() => setCreat(true)}>ليس لديك لديك حساب؟ <span>انشاء حساب جديد</span></button>
             </div>
             <div className={styles.loginContent} style={{display: creat ? 'flex' : 'none'}}>
                 <div className={styles.title}>
-                    <h2>مرحبا بك برجاء انشاء حساب جديد</h2>
+                    <h2>انشاء حساب جديد</h2>
+                    <p>انت دائما مرحب بك في المكان المناسب لمتابعة مالك</p>
                 </div>
-                <div className="inputContainer">
-                    <label> الاسم : </label>
-                    <input type="text" value={userName} placeholder="برجاء ادخال اسم المستخدم" onChange={(e) => setUserName(e.target.value)}/>
+                <div className={styles.inputBox}>
+                    <div className="inputContainer">
+                        <label><IoPerson/></label>
+                        <input type="text" value={userName} placeholder="اسم المستخدم" onChange={(e) => setUserName(e.target.value)}/>
+                    </div>
+                    <div className="inputContainer">
+                        <label><CiMail/></label>
+                        <input type="text" value={email} placeholder="البريد الالكتروني" onChange={(e) => setEmail(e.target.value)}/>
+                    </div>
+                    <div className="inputContainer">
+                        <label><CiLock/></label>
+                        <input type="password" value={password} placeholder="كلمة المرور" onChange={(e) => setPassword(e.target.value)}/>
+                    </div>
+                    <button className={styles.loginBtn}  onClick={handleCreatAcc}> انشاء حساب جديد</button>
+                    <button className={styles.creatBtn} onClick={() => setCreat(false)}>لديك حساب بالفعل؟ <span>تسجيل الدخول</span></button>
                 </div>
-                <div className="inputContainer">
-                    <label>البريد الالكتروني : </label>
-                    <input type="text" value={email} placeholder="برجاء ادخال البريد الالكتروني" onChange={(e) => setEmail(e.target.value)}/>
-                </div>
-                <div className="inputContainer">
-                    <label>كلمة المرور : </label>
-                    <input type="password" value={password} placeholder="برجاء ادخال كلمة المرور" onChange={(e) => setPassword(e.target.value)}/>
-                </div>
-                <div className="inputContainer">
-                    <label>قيمة المحافظ: </label>
-                    <input type="number" value={wallet} placeholder="برجاء ادخال رائس مال المحافظ " onChange={(e) => setWallets(e.target.value)}/>
-                </div>
-                <div className="inputContainer">
-                    <label> قيمة الكاش : </label>
-                    <input type="number" value={cash} placeholder="برجاء ادخال رائس مال الكاش" onChange={(e) => setCah(e.target.value)}/>
-                </div>
-                <button className={styles.loginBtn}  onClick={handleCreatAcc}> انشاء حساب جديد</button>
-                <button className={styles.creatBtn} onClick={() => setCreat(false)}>لديك حساب بالفعل؟ <span>تسجيل الدخول</span></button>
             </div>
         </div>
     )
