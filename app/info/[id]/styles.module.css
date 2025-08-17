@@ -1,0 +1,90 @@
+.info {
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--background-color);
+}
+.backBtn {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 30px;
+    left: 15px;
+    background-color: white;
+    font-size: 25px;
+    color: var(--main-color);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.loaderContainer {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.loader {
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid var(--darck-green);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.infoContent {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px 0;
+}
+.infoContent h2 {
+    width: 80px;
+    height: 80px;
+    background-color: var(--main-color);
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+}
+.infoContent h3 {
+    color: var(--text-color);
+    font-size: 30px;
+}
+.amountInfo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+.amountInfo p {
+    color: var(--gray-color);
+}
+.tableContainer {
+    width: 100%;
+    padding: 15px 2%;
+    overflow: scroll;
+}
+.tableContainer::-webkit-scrollbar {
+    display: none;
+}
+.delBtn {
+    background-color: transparent;
+    font-size: 25px;
+    border: none;
+    color: rgb(255, 50, 50);
+    cursor: pointer;
+}

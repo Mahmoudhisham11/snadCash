@@ -35,6 +35,7 @@ function Login() {
                 userName,
                  password, 
                  email,
+                 dollar: Number(0)
                 })
             alert("تم انشاء حساب للمستخدم")
             setUserName('')

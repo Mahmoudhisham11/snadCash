@@ -9,15 +9,18 @@ import { IoPersonAddOutline } from "react-icons/io5";
 import { CiTrash } from "react-icons/ci";
 import { MdOutlineCall } from "react-icons/md";
 import { MdKeyboardArrowLeft } from "react-icons/md";
+import { BiLogOutCircle } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 import { collection, onSnapshot, query, where, deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/app/firebase";
+import Dollar from "../Dollar/page";
 
 function Main() {
   const router = useRouter();
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [openSearch, setOpenSearch] = useState(false);
+  const [dollar, setDollar] = useState(false)
   const [clients, setClients] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -63,8 +66,16 @@ function Main() {
     client.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleLogout = () => {
+    if(typeof window !== 'undefined') {
+      localStorage.clear()
+      window.location.reload()
+    }
+  }
+
   return (
     <div className={styles.main}>
+      <Dollar dollar={dollar} setDollar={setDollar}/>
       <div className={styles.header}>
         <div className={styles.name}>
           <h2>مرحبا, <br /> {userName}👋</h2>
@@ -89,7 +100,7 @@ function Main() {
       </div>
 
       <div className={styles.btns}>
-        <button>
+        <button onClick={() => router.push('/operations')}>
           <span><FiSend /></span>
           <span>عملية جديدة</span>
         </button>
@@ -97,12 +108,15 @@ function Main() {
           <span><IoPersonAddOutline /></span>
           <span>عميل جديد</span>
         </button>
-        <button>
+        <button onClick={() => setDollar(true)}>
           <span><PiCurrencyDollarSimple /></span>
           <span>سعر الدولار</span>
         </button>
+        <button onClick={handleLogout}>
+          <span><BiLogOutCircle /></span>
+          <span> تسجيل الخروج</span>
+        </button>
       </div>
-
       <div className={styles.clientsContainer}>
         <div className={styles.title}>
           <h3>كل العملاء المتاحين</h3>
@@ -126,7 +140,7 @@ function Main() {
                     <span><MdOutlineCall /></span>
                     <span>{client.phone}</span>
                   </p>
-                  <Link href={`/client/${client.id}`} className={styles.clientPage}>
+                  <Link href={`/info/${encodeURIComponent(client.id)}`} className={styles.clientPage}>
                     <span>صفحة العميل</span>
                     <span><MdKeyboardArrowLeft /></span>
                   </Link>

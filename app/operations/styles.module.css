@@ -1,5 +1,4 @@
-.clients {
-    width: 100%;
+.operations {
     height: 100vh;
     background-color: var(--background-color);
 }

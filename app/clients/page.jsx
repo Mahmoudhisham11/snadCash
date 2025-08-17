@@ -5,17 +5,25 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { IoPersonOutline } from "react-icons/io5";
 import { MdOutlinePhone } from "react-icons/md";
 import { TbCurrencyDollar } from "react-icons/tb";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "../firebase"; // المسار حسب مكان ملف firebase.js
+import { db } from "../firebase";
 
 function Clients() {
     const router = useRouter();
-    const email = typeof window !== 'undefined' ? localStorage.getItem('email') : ''
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
     const [amount, setAmount] = useState("");
+    const [type, setType] = useState('')
+    const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
+
+
+    useEffect(() => {
+    if (typeof window !== "undefined") {
+        setEmail(localStorage.getItem("email") || "");
+    }
+    }, []);
 
     const handleAddClient = async () => {
         if (!name || !phone || !amount) {
@@ -29,6 +37,7 @@ function Clients() {
                 name,
                 phone,
                 email,
+                type,
                 amount: parseFloat(amount),
                 createdAt: new Date()
             });
@@ -36,6 +45,7 @@ function Clients() {
             setName("");
             setPhone("");
             setAmount("");
+            setType("");
         } catch (err) {
             console.error(err);
             alert("حدث خطأ أثناء الإضافة");
@@ -77,9 +87,17 @@ function Clients() {
                         onChange={(e) => setAmount(e.target.value)}
                     />
                 </div>
+                <div className="inputContainer">
+                    <label><TbCurrencyDollar/></label>
+                    <select value={type} onChange={(e) => setType(e.target.value)}>
+                        <option value="" disabled selected>-- اختر المبلغ لمين --</option>
+                        <option value="ليك">ليك</option>
+                        <option value="عليك">عليك</option>
+                    </select>
+                </div>
                 <button 
                     onClick={handleAddClient} 
-                    disabled={loading} // قفل الزرار لو بيحمل
+                    disabled={loading}
                     style={{
                         position: "relative",
                         display: "flex",
@@ -87,29 +105,8 @@ function Clients() {
                         alignItems: "center"
                     }}
                 >
-                    {loading ? (
-                        <span 
-                            style={{
-                                border: "2px solid #f3f3f3",
-                                borderTop: "2px solid #fff",
-                                borderRadius: "50%",
-                                width: "16px",
-                                height: "16px",
-                                animation: "spin 1s linear infinite"
-                            }}
-                        ></span>
-                    ) : (
-                        "اضف العميل"
-                    )}
+                    {loading ? (<span className={styles.loader}></span>) : ("اضف العميل")}
                 </button>
-                <style>
-                    {`
-                        @keyframes spin {
-                            0% { transform: rotate(0deg); }
-                            100% { transform: rotate(360deg); }
-                        }
-                    `}
-                </style>
             </div>
         </div>
     );
