@@ -11,7 +11,8 @@ import {
   query, 
   where, 
   deleteDoc, 
-  updateDoc 
+  updateDoc,
+  addDoc 
 } from "firebase/firestore";
 import React from "react";
 import { db } from "@/app/firebase";
@@ -19,8 +20,6 @@ import { CiTrash } from "react-icons/ci";
 
 function Info({ params }) {
   const router = useRouter();
-
-  // ✅ نفك الباراميتر بالطريقة الصحيحة
   const unwrappedParams = React.use(params);
   const id = decodeURIComponent(unwrappedParams.id);
 
@@ -30,25 +29,34 @@ function Info({ params }) {
   const [operations, setOperations] = useState([]);
   const [opsLoading, setOpsLoading] = useState(true);
 
+  const [dollar, setDollar] = useState(50); // سعر الدولار الافتراضي
+
+  // states للـ Modal
+  const [showModal, setShowModal] = useState(false);
+  const [loadingOp, setLoadingOp] = useState(false);
+  const [operationType, setOperationType] = useState("");
+  const [amountType, setAmountType] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [amount, setAmount] = useState("");
+
   // -------------------- جلب بيانات العميل --------------------
   useEffect(() => {
-    const fetchClient = async () => {
-      try {
-        const docRef = doc(db, "clients", id);
-        const docSnap = await getDoc(docRef);
+    if (!id) return;
 
-        if (docSnap.exists()) {
-          setClient(docSnap.data());
-        } else {
-          console.log("❌ العميل مش موجود");
-        }
-      } catch (err) {
-        console.error("Error fetching client:", err);
+    const clientRef = doc(db, "clients", id);
+    const unsub = onSnapshot(clientRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setClient(docSnap.data());
+      } else {
+        console.log("❌ العميل مش موجود");
       }
       setLoading(false);
-    };
+    }, (err) => {
+      console.error("Error fetching client:", err);
+      setLoading(false);
+    });
 
-    if (id) fetchClient();
+    return () => unsub();
   }, [id]);
 
   // -------------------- جلب العمليات الخاصة بالعميل --------------------
@@ -76,6 +84,88 @@ function Info({ params }) {
     return () => unsub();
   }, [id]);
 
+  // -------------------- جلب سعر الدولار Live --------------------
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "users"), (snap) => {
+      if (!snap.empty) {
+        const userDoc = snap.docs[0];
+        setDollar(userDoc.data().dollar || 50);
+      }
+    });
+    return () => unsub();
+  }, []);
+
+  // -------------------- إضافة عملية جديدة --------------------
+  const handleAddOperation = async () => {
+    if (!operationType || !amountType || !paymentMethod || !amount) {
+      alert("من فضلك املأ كل الحقول");
+      return;
+    }
+
+    setLoadingOp(true);
+    try {
+      // هات بيانات العميل
+      const clientDocRef = doc(db, "clients", id);
+      const clientDocSnap = await getDoc(clientDocRef);
+      if (!clientDocSnap.exists()) {
+        alert("❌ العميل غير موجود");
+        setLoadingOp(false);
+        return;
+      }
+      const clientData = clientDocSnap.data();
+      let currentAmount = clientData.amount;
+
+      // حساب العملية بالدولار
+      let operationValueInDollar = 0;
+      if (amountType === "جنية") {
+        operationValueInDollar = parseFloat(amount) / dollar;
+      } else {
+        operationValueInDollar = parseFloat(amount);
+      }
+
+      // تعديل الرصيد
+      if (operationType === "ارسال") {
+        currentAmount -= operationValueInDollar;
+      } else if (operationType === "استلام") {
+        currentAmount += operationValueInDollar;
+      }
+
+      // تحديث رصيد العميل
+      await updateDoc(clientDocRef, { amount: currentAmount });
+
+      // إضافة العملية
+      await addDoc(collection(db, "operations"), {
+        clientId: id,
+        operationType,
+        amountType,
+        paymentMethod,
+        amount: parseFloat(amount),
+        confirmation: false,
+        createdAt: new Date()
+      });
+
+      alert("✅ تمت إضافة العملية بنجاح!");
+      setShowModal(false);
+      setOperationType("");
+      setAmountType("");
+      setPaymentMethod("");
+      setAmount("");
+    } catch (err) {
+      console.error("Error adding operation:", err);
+      alert("❌ حدث خطأ أثناء الإضافة");
+    }
+    setLoadingOp(false);
+  };
+
+  // -------------------- حساب الاجمالي بالدولار --------------------
+  const totalDollar = operations.reduce((sum, op) => {
+    const amountInDollar =
+      op.amountType === "جنية"
+        ? (op.amount / dollar)
+        : op.amount;
+    return sum + (parseFloat(amountInDollar) || 0);
+  }, 0).toFixed(2);
+
   // -------------------- ريندر --------------------
   if (loading) {
     return (
@@ -100,6 +190,12 @@ function Info({ params }) {
           <p>${client.amount}</p>
           <p>{client.type}</p>
         </div>
+        <button 
+          className={styles.addBtn}
+          onClick={() => setShowModal(true)}
+        >
+           عملية جديدة
+        </button>
       </div>
 
       <div className={styles.tableContainer}>
@@ -108,6 +204,7 @@ function Info({ params }) {
             <tr>
               <th>تأكيد</th>
               <th>المبلغ</th>
+              <th>المبلغ بالدولار</th>
               <th>النوع</th>
               <th>طريقة الدفع</th>
               <th>التاريخ</th>
@@ -117,7 +214,7 @@ function Info({ params }) {
           <tbody>
             {opsLoading ? (
               <tr>
-                <td colSpan={5}>
+                <td colSpan={7}>
                   <div className={styles.loaderInline}>
                     <span className={styles.loader}></span>
                   </div>
@@ -125,7 +222,7 @@ function Info({ params }) {
               </tr>
             ) : operations.length === 0 ? (
               <tr>
-                <td colSpan={6} style={{ textAlign: "center" }}>
+                <td colSpan={7} style={{ textAlign: "center" }}>
                   لا توجد عمليات لهذا العميل
                 </td>
               </tr>
@@ -135,6 +232,11 @@ function Info({ params }) {
                   ? op.createdAt.toDate()
                   : (op.createdAt ? new Date(op.createdAt) : null);
                 const dateStr = dt ? dt.toLocaleDateString('ar-EG') : '-';
+
+                const amountInDollar =
+                  op.amountType === "جنية"
+                    ? (op.amount / dollar).toFixed(2)
+                    : op.amount;
 
                 return (
                   <tr key={op.id}>
@@ -158,6 +260,7 @@ function Info({ params }) {
                         ? `${op.amount} ج.م`
                         : `$${op.amount}`}
                     </td>
+                    <td>${amountInDollar}</td>
                     <td>{op.operationType || "-"}</td>
                     <td>{op.paymentMethod || "-"}</td>
                     <td>{dateStr}</td>
@@ -169,6 +272,31 @@ function Info({ params }) {
                           const pass = prompt("ادخل كلمة السر لحذف العملية:");
                           if (pass === "1234") {
                             try {
+                              const clientDocRef = doc(db, "clients", id);
+                              const clientDocSnap = await getDoc(clientDocRef);
+                              if (!clientDocSnap.exists()) return;
+                              const clientData = clientDocSnap.data();
+                              let currentAmount = clientData.amount;
+
+                              // حساب قيمة العملية بالدولار
+                              let operationValueInDollar = 0;
+                              if (op.amountType === "جنية") {
+                                operationValueInDollar = parseFloat(op.amount) / dollar;
+                              } else {
+                                operationValueInDollar = parseFloat(op.amount);
+                              }
+
+                              // عكس العملية
+                              if (op.operationType === "ارسال") {
+                                currentAmount += operationValueInDollar;
+                              } else if (op.operationType === "استلام") {
+                                currentAmount -= operationValueInDollar;
+                              }
+
+                              // تحديث رصيد العميل
+                              await updateDoc(clientDocRef, { amount: currentAmount });
+
+                              // حذف العملية
                               await deleteDoc(doc(db, "operations", op.id));
                             } catch (err) {
                               console.error("Error deleting operation:", err);
@@ -186,8 +314,68 @@ function Info({ params }) {
               })
             )}
           </tbody>
+          <tfoot>
+            <tr>
+              <td colSpan={7} style={{ textAlign: "center", fontWeight: "bold" }}>
+                الاجمالي بالدولار: ${totalDollar}
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
+
+      {/* -------------------- Modal -------------------- */}
+      {showModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h3>إضافة عملية جديدة</h3>
+            <div className={styles.form}>
+              <div className="inputContainer">
+                <select 
+                  value={operationType} 
+                  onChange={(e) => setOperationType(e.target.value)}
+                >
+                  <option value="" disabled>-- اختر نوع العملية --</option>
+                  <option value="ارسال">ارسال</option>
+                  <option value="استلام">استلام</option>
+                </select>
+              </div>
+              <div className="inputContainer">
+                  <select 
+                  value={amountType} 
+                  onChange={(e) => setAmountType(e.target.value)}
+                >
+                  <option value="" disabled>-- اختر نوع المبلغ --</option>
+                  <option value="دولار">دولار</option>
+                  <option value="جنية">جنية</option>
+                </select>
+              </div>
+              <div className="inputContainer">
+                <input 
+                type="text" 
+                placeholder="طريقة الدفع"
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
+              </div>
+              <div className="inputContainer">
+                <input 
+                type="number" 
+                placeholder="المبلغ المدفوع"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
+              </div>
+            </div>
+            <div className={styles.modalActions}>
+              <button onClick={handleAddOperation} disabled={loadingOp}>
+                {loadingOp ? "جاري الحفظ..." : "إضافة"}
+              </button>
+              <button onClick={() => setShowModal(false)}>إلغاء</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

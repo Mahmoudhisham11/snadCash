@@ -100,10 +100,6 @@ function Main() {
       </div>
 
       <div className={styles.btns}>
-        <button onClick={() => router.push('/operations')}>
-          <span><FiSend /></span>
-          <span>عملية جديدة</span>
-        </button>
         <button onClick={() => router.push('/clients')}>
           <span><IoPersonAddOutline /></span>
           <span>عميل جديد</span>

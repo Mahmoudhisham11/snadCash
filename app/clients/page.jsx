@@ -90,7 +90,7 @@ function Clients() {
                 <div className="inputContainer">
                     <label><TbCurrencyDollar/></label>
                     <select value={type} onChange={(e) => setType(e.target.value)}>
-                        <option value="" disabled selected>-- اختر المبلغ لمين --</option>
+                        <option value="" disabled>-- اختر المبلغ لمين --</option>
                         <option value="ليك">ليك</option>
                         <option value="عليك">عليك</option>
                     </select>
